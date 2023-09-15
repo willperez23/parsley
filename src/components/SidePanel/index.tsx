@@ -6,6 +6,7 @@ import { HAS_OPENED_DRAWER } from "constants/cookies";
 import { size, zIndex } from "constants/tokens";
 import { ExpandedLines } from "types/logs";
 import {
+  CommentNavGroup,
   ExpandedNavGroup,
   FilterNavGroup,
   HighlightNavGroup,
@@ -46,6 +47,7 @@ const SidePanel: React.FC<SidePanelProps> = ({
           expandedLines={expandedLines}
         />
         <HighlightNavGroup />
+        <CommentNavGroup />
       </PaddedContainer>
     </StyledSideNav>
   );

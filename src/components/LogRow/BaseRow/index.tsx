@@ -1,6 +1,9 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import styled from "@emotion/styled";
+import Button from "@leafygreen-ui/button";
 import { palette } from "@leafygreen-ui/palette";
+import Tooltip from "@leafygreen-ui/tooltip";
+import CSS from "csstype";
 import { useLogWindowAnalytics } from "analytics";
 import Icon from "components/Icon";
 import { QueryParams } from "constants/queryParams";
@@ -56,6 +59,23 @@ const BaseRow: React.FC<BaseRowProps> = ({
     undefined
   );
 
+  // hover for comment icon
+  const [ishover, sethover] = useState(false);
+
+  // log line hover functionality
+  /**
+   *
+   */
+  const mouseOver = () => {
+    sethover(true);
+  };
+  /**
+   *
+   */
+  const mouseOut = () => {
+    sethover(false);
+  };
+
   const [bookmarks, setBookmarks] = useQueryParam<number[]>(
     QueryParams.Bookmarks,
     []
@@ -99,6 +119,8 @@ const BaseRow: React.FC<BaseRowProps> = ({
       data-shared={shared}
       highlighted={highlighted}
       onDoubleClick={handleDoubleClick}
+      onMouseOut={mouseOut}
+      onMouseOver={mouseOver}
       shared={shared}
     >
       <ShareIcon
@@ -108,6 +130,25 @@ const BaseRow: React.FC<BaseRowProps> = ({
         size="small"
       />
       <Index lineNumber={lineNumber} />
+
+      {/* hoover functionality for tooltip */}
+      {ishover === true ? (
+        <Tooltip
+          trigger={
+            <StyledButton
+              leftGlyph={<Icon glyph="SMS" />}
+              onClick={() => {}}
+              size="xsmall"
+            />
+          }
+        >
+          Comments are a potential future feature! How do you currently share
+          your thoughts on log files?
+        </Tooltip>
+      ) : (
+        <div style={spacer} />
+      )}
+
       <StyledPre shouldWrap={wrap}>
         <Highlighter
           color={color}
@@ -160,7 +201,7 @@ const Index = styled.pre<{ lineNumber: number }>`
   margin-top: 0;
   margin-bottom: 0;
   margin-left: ${size.xs};
-  margin-right: ${size.s};
+  margin-right: ${size.xxs};
   flex-shrink: 0;
 
   font-family: inherit;
@@ -188,5 +229,16 @@ const StyledPre = styled.pre<{
   ${({ shouldWrap }) =>
     shouldWrap && ` /* wrap multiple lines */ white-space: break-spaces;`}
 `;
+
+// styling for the comment trigger
+const StyledButton = styled(Button)`
+  width: 32px;
+  margin-right: 12px;
+  height: 17px;
+`;
+// styling for the empty spacer
+const spacer: CSS.Properties = {
+  width: "44px",
+};
 
 export default BaseRow;
